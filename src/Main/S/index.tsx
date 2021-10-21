@@ -1,121 +1,32 @@
 import Konva from "konva";
 import { useEffect, useRef } from "react";
 import { Layer } from "react-konva";
-import { checkHeadSegmentIntersection } from "../../utils/intersection";
-import { clearRotation } from "../../utils/rotations";
+import { addSnakeKeyPressListener, removeSnakeKeyPressListener } from "../../utils/listeners";
 import { addSegment } from "../../utils/segments";
+import { animateSnake, makeHead } from "../../utils/snake";
 
 const S = () => {
-  const rectRef: any = useRef();
-  const directionRef = useRef([1, 0]);
-  const rotateRef = useRef<Array<any>>([]);
-  const segmentList = useRef<Array<any>>([]);
-  var head = new Konva.Shape({
-    sceneFunc: (context, shape) => {
-      context.beginPath();
-      context.moveTo(50, 25);
-      context.lineTo(25, 50);
-      context.lineTo(0, 50);
-      context.lineTo(0, 0);
-      context.lineTo(25, 0);
-      context.closePath();
-      context.fillStrokeShape(shape);
-    },
-    fill: "#00D2FF",
-    stroke: "black",
-    strokeWidth: 1,
-    x: 125,
-    y: 25,
-    offset: {
-      x: 25,
-      y: 25,
-    },
-  });
+  const head = makeHead();
+  const headRef = useRef<any>(head);
+  const layerRef = useRef<Konva.Layer>(null);
+  const rotateRef = useRef<Array<any>>([]); //list of points where segments rotate
+  const segmentRef = useRef<Array<any>>([]);
 
   useEffect(() => {
-    rectRef.current.add(head);
-    addSegment(segmentList.current,rectRef.current)
-    var anim = new Konva.Animation((frame: any) => {
-      head.x(head.attrs.x + directionRef.current[0]);
-      head.y(head.attrs.y - directionRef.current[1]);
-      segmentList.current.forEach((segment, index: number) => {
-        rotateRef.current.forEach((element) => {
-          if (
-            segment.rect.attrs.x === element.position[0] &&
-            segment.rect.attrs.y === element.position[1]
-          ) {
-            element.segmentsPassed = element.segmentsPassed + 1;
-            segment.direction = element.direction;
-          }
-        });
-        segment.rect.x(segment.rect.attrs.x + segment.direction[0]);
-        segment.rect.y(segment.rect.attrs.y - segment.direction[1]);
-        if(checkHeadSegmentIntersection(segmentList.current,head)) anim.stop()
-      });
-      clearRotation(rotateRef.current, segmentList.current.length - 1);
-    }, rectRef);
-    anim.start();
+    const { current: head } = headRef;
+    const { current: layer } = layerRef;
+    const { current: segmentList } = segmentRef;
+    const { current: rotateList } = rotateRef;
+    layer?.add(head.rect);
+    addSegment(segmentList,layer)
+    animateSnake({head,layer,segmentList,rotateList});
+
+    return removeSnakeKeyPressListener(headRef,rotateRef)
   });
 
-  window.addEventListener("keypress", ({ code }) => {
-    if (code === "KeyW") {
-      if (
-        (directionRef.current[0] === 1 && directionRef.current[1] === 0) ||
-        (directionRef.current[0] === -1 && directionRef.current[1] === 0)
-      ) {
-        rotateRef.current.push({
-          position: [head.attrs.x - 25, head.attrs.y - 25],
-          direction: [0, 1],
-          segmentsPassed: 0,
-        });
-        head.rotate(directionRef.current[0] * -90);
-        directionRef.current = [0, 1];
-      }
-    } else if (code === "KeyS") {
-      if (
-        (directionRef.current[0] === 1 && directionRef.current[1] === 0) ||
-        (directionRef.current[0] === -1 && directionRef.current[1] === 0)
-      ) {
-        rotateRef.current.push({
-          position: [head.attrs.x - 25, head.attrs.y - 25],
-          direction: [0, -1],
-          segmentsPassed: 0,
-        });
-        head.rotate(directionRef.current[0] * 90);
-        directionRef.current = [0, -1];
-      }
-    } else if (code === "KeyA") {
-      if (
-        (directionRef.current[0] === 0 && directionRef.current[1] === 1) ||
-        (directionRef.current[0] === 0 && directionRef.current[1] === -1)
-      ) {
-        rotateRef.current.push({
-          position: [head.attrs.x - 25, head.attrs.y - 25],
-          direction: [-1, 0],
-          segmentsPassed: 0,
-        });
-        head.rotate(directionRef.current[1] * -90);
-        directionRef.current = [-1, 0];
-      }
-    } else if (code === "KeyD") {
-      if (
-        (directionRef.current[0] === 0 && directionRef.current[1] === 1) ||
-        (directionRef.current[0] === 0 && directionRef.current[1] === -1)
-      ) {
-        rotateRef.current.push({
-          position: [head.attrs.x - 25, head.attrs.y - 25],
-          direction: [1, 0],
-          segmentsPassed: 0,
-        });
-        head.rotate(directionRef.current[1] * 90);
-        directionRef.current = [1, 0];
-      }
-    } else if (code === "KeyP") {
-      addSegment(segmentList.current, rectRef.current);
-    }
-  });
+  addSnakeKeyPressListener(headRef,rotateRef);
 
-  return <Layer ref={rectRef} />
+  return <Layer ref={layerRef} />;
 };
 
 export default S;
