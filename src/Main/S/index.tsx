@@ -96,7 +96,6 @@ const S = () => {
         (directionRef.current[0] === 1 && directionRef.current[1] === 0) ||
         (directionRef.current[0] === -1 && directionRef.current[1] === 0)
       ) {
-        console.log(head.attrs.x);
         rotateRef.current.push({
           position: [head.attrs.x - 25, head.attrs.y - 25],
           direction: [0, -1],
