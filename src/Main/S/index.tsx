@@ -1,11 +1,12 @@
 import Konva from "konva";
 import { useEffect, useRef } from "react";
 import { Layer } from "react-konva";
+import { addSegment } from "../../utils/segments";
 
 const S = () => {
   const rectRef: any = useRef();
   const direction = useRef([1, 0]);
-  let segment = new Konva.Rect({
+  let rect = new Konva.Rect({
     x: 0,
     y: 0,
     width: 50,
@@ -15,7 +16,7 @@ const S = () => {
     strokeWidth: 0.5,
   });
 
-  const segments = useRef([{ segment, direction: [1, 0] }]);
+  const segmentList = useRef([{ rect, direction: [1, 0] }]);
   var head = new Konva.Shape({
     sceneFunc: function (context, shape) {
       context.beginPath();
@@ -40,12 +41,13 @@ const S = () => {
 
   useEffect(() => {
     rectRef.current.add(head);
-    rectRef.current.add(segments.current[0].segment);
+    rectRef.current.add(segmentList.current[0].rect);
     var anim = new Konva.Animation(function (frame: any) {
       head.x(head.attrs.x + direction.current[0]);
       head.y(head.attrs.y - direction.current[1]);
-      segments.current.forEach(element => {
-          
+      segmentList.current.forEach((segment) => {
+        segment.rect.x(segment.rect.attrs.x + segment.direction[0]);
+        segment.rect.y(segment.rect.attrs.y - segment.direction[1]);
       });
     }, rectRef);
     anim.start();
@@ -57,7 +59,7 @@ const S = () => {
         (direction.current[0] === 1 && direction.current[1] === 0) ||
         (direction.current[0] === -1 && direction.current[1] === 0)
       ) {
-        head.y(head.attrs.y-50)
+        head.y(head.attrs.y - 50);
         head.rotate(direction.current[0] * -90);
         direction.current = [0, 1];
       }
@@ -66,7 +68,7 @@ const S = () => {
         (direction.current[0] === 1 && direction.current[1] === 0) ||
         (direction.current[0] === -1 && direction.current[1] === 0)
       ) {
-        head.y(head.attrs.y+50)
+        head.y(head.attrs.y + 50);
         head.rotate(direction.current[0] * 90);
         direction.current = [0, -1];
       }
@@ -75,16 +77,26 @@ const S = () => {
         (direction.current[0] === 0 && direction.current[1] === 1) ||
         (direction.current[0] === 0 && direction.current[1] === -1)
       ) {
-        head.x(head.attrs.x-50)
+        head.x(head.attrs.x - 50);
         head.rotate(direction.current[1] * -90);
         direction.current = [-1, 0];
       }
     } else if (code === "KeyD") {
+        let rect = new Konva.Rect({
+            x: 0,
+            y: 0,
+            width: 50,
+            height: 50,
+            fill: "#00D2FF",
+            stroke: "black",
+            strokeWidth: 0.5,
+          });
+          addSegment(segmentList.current,{rect,direction: [1, 0]},rectRef.current)
       if (
         (direction.current[0] === 0 && direction.current[1] === 1) ||
         (direction.current[0] === 0 && direction.current[1] === -1)
       ) {
-        head.x(head.attrs.x+50)
+        head.x(head.attrs.x + 50);
         head.rotate(direction.current[1] * 90);
         direction.current = [1, 0];
       }
