@@ -6,7 +6,7 @@ export const addSegment = (
 ) => {
   if(!segmentList.length){
     let rect = new Konva.Rect({
-      x: 50,
+      x: 40,
       y: 0,
       width: 50,
       height: 50,

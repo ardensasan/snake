@@ -1,6 +1,7 @@
 import Konva from "konva";
 import { useEffect, useRef } from "react";
 import { Layer } from "react-konva";
+import { checkHeadSegmentIntersection } from "../../utils/intersection";
 import { clearRotation } from "../../utils/rotations";
 import { addSegment } from "../../utils/segments";
 
@@ -49,6 +50,7 @@ const S = () => {
         });
         segment.rect.x(segment.rect.attrs.x + segment.direction[0]);
         segment.rect.y(segment.rect.attrs.y - segment.direction[1]);
+        if(checkHeadSegmentIntersection(segmentList.current,head)) anim.stop()
       });
       clearRotation(rotateRef.current, segmentList.current.length - 1);
     }, rectRef);
