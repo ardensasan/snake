@@ -10,7 +10,7 @@ const S = () => {
   const rotateRef = useRef<Array<any>>([]);
   const segmentList = useRef<Array<any>>([]);
   var head = new Konva.Shape({
-    sceneFunc: function (context, shape) {
+    sceneFunc: (context, shape) => {
       context.beginPath();
       context.moveTo(50, 25);
       context.lineTo(25, 50);
@@ -22,7 +22,7 @@ const S = () => {
     },
     fill: "#00D2FF",
     stroke: "black",
-    strokeWidth: 0.5,
+    strokeWidth: 1,
     x: 125,
     y: 25,
     offset: {
@@ -33,6 +33,7 @@ const S = () => {
 
   useEffect(() => {
     rectRef.current.add(head);
+    addSegment(segmentList.current,rectRef.current)
     var anim = new Konva.Animation((frame: any) => {
       head.x(head.attrs.x + directionRef.current[0]);
       head.y(head.attrs.y - directionRef.current[1]);
@@ -107,12 +108,12 @@ const S = () => {
         head.rotate(directionRef.current[1] * 90);
         directionRef.current = [1, 0];
       }
-    }else if (code === "KeyP") {
-      addSegment(segmentList.current,rectRef.current)
+    } else if (code === "KeyP") {
+      addSegment(segmentList.current, rectRef.current);
     }
   });
 
-  return <Layer ref={rectRef} />;
+  return <Layer ref={rectRef} />
 };
 
 export default S;

@@ -41,7 +41,6 @@ export const updateSegment = (
   direction: any
 ) => {
   segmentList.forEach((segment: any, index: number) => {
-    
     if (index === 0) {
       segment.rect.x(head.attrs.x-25);
       segment.rect.y(head.attrs.y-25);
