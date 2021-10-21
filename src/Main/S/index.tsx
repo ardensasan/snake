@@ -2,34 +2,13 @@ import Konva from "konva";
 import { useEffect, useRef } from "react";
 import { Layer } from "react-konva";
 import { clearRotation } from "../../utils/rotations";
+import { addSegment } from "../../utils/segments";
 
 const S = () => {
   const rectRef: any = useRef();
   const directionRef = useRef([1, 0]);
   const rotateRef = useRef<Array<any>>([]);
-  let rect = new Konva.Rect({
-    x: 0,
-    y: 0,
-    width: 50,
-    height: 50,
-    fill: "#00D2FF",
-    stroke: "black",
-    strokeWidth: 0.5,
-  });
-
-  let rect2 = new Konva.Rect({
-    x: 50,
-    y: 0,
-    width: 50,
-    height: 50,
-    fill: "#00D2FF",
-    stroke: "black",
-    strokeWidth: 0.5,
-  });
-  const segmentList = useRef([
-    { rect, direction: [1, 0] },
-    { rect: rect2, direction: [1, 0] },
-  ]);
+  const segmentList = useRef<Array<any>>([]);
   var head = new Konva.Shape({
     sceneFunc: function (context, shape) {
       context.beginPath();
@@ -54,8 +33,6 @@ const S = () => {
 
   useEffect(() => {
     rectRef.current.add(head);
-    rectRef.current.add(segmentList.current[0].rect);
-    rectRef.current.add(segmentList.current[1].rect);
     var anim = new Konva.Animation((frame: any) => {
       head.x(head.attrs.x + directionRef.current[0]);
       head.y(head.attrs.y - directionRef.current[1]);
@@ -130,6 +107,8 @@ const S = () => {
         head.rotate(directionRef.current[1] * 90);
         directionRef.current = [1, 0];
       }
+    }else if (code === "KeyP") {
+      addSegment(segmentList.current,rectRef.current)
     }
   });
 
