@@ -1,3 +1,4 @@
+[Try Here](https://ardensasan.github.io/snake/)
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
