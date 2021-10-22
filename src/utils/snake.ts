@@ -1,6 +1,15 @@
 import Konva from "konva";
-import { checkHeadSegmentIntersection } from "./intersection";
-import { updateRotationList, updateSegment, updateSegmentRotationDirection } from "./segments";
+import { repositionFood } from "./food";
+import {
+  checkHeadFoodIntersection,
+  checkHeadSegmentIntersection,
+} from "./intersection";
+import {
+  addSegment,
+  updateRotationList,
+  updateSegment,
+  updateSegmentRotationDirection,
+} from "./segments";
 export const makeHead = () => {
   var rect = new Konva.Shape({
     sceneFunc: (context, shape) => {
@@ -26,21 +35,32 @@ export const makeHead = () => {
 
   const direction = [1, 0];
 
-  return {rect,direction}
+  return { rect, direction };
 };
 
-export const animateSnake = ({head,layer,segmentList,rotateList}:any) =>{
+export const animateSnake = ({
+  foodRect,
+  head,
+  layer,
+  segmentList,
+  rotateList,
+}: any) => {
   var anim = new Konva.Animation((frame: any) => {
     head.rect.x(head.rect.attrs.x + head.direction[0]);
     head.rect.y(head.rect.attrs.y - head.direction[1]);
-    segmentList.forEach((segment:any) => {
-      rotateList.forEach((rotation:any) => {
-        updateSegmentRotationDirection(segment,rotation)
+    segmentList.forEach((segment: any) => {
+      rotateList.forEach((rotation: any) => {
+        updateSegmentRotationDirection(segment, rotation);
       });
-      updateSegment(segment)
+      updateSegment(segment);
+      if (checkHeadFoodIntersection(head.rect, foodRect)){
+        repositionFood(foodRect);
+        addSegment(segmentList,layer)
+      }
+
       if (checkHeadSegmentIntersection(segmentList, head.rect)) anim.stop();
     });
     updateRotationList(rotateList, segmentList.length - 1);
   }, layer);
   anim.start();
-}
+};
