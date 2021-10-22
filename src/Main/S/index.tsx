@@ -1,6 +1,7 @@
 import Konva from "konva";
 import { useEffect, useRef } from "react";
 import { Layer } from "react-konva";
+import { createFood } from "../../utils/food";
 import { addSnakeKeyPressListener, removeSnakeKeyPressListener } from "../../utils/listeners";
 import { addSegment } from "../../utils/segments";
 import { animateSnake, makeHead } from "../../utils/snake";
@@ -20,6 +21,7 @@ const S = () => {
     layer?.add(head.rect);
     addSegment(segmentList,layer)
     animateSnake({head,layer,segmentList,rotateList});
+    createFood(layer)
 
     return removeSnakeKeyPressListener(headRef,rotateRef)
   });

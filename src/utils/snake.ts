@@ -29,7 +29,6 @@ export const makeHead = () => {
   return {rect,direction}
 };
 
-
 export const animateSnake = ({head,layer,segmentList,rotateList}:any) =>{
   var anim = new Konva.Animation((frame: any) => {
     head.rect.x(head.rect.attrs.x + head.direction[0]);
