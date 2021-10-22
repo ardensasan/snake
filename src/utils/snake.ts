@@ -46,8 +46,8 @@ export const animateSnake = ({
   rotateList,
 }: any) => {
   var anim = new Konva.Animation((frame: any) => {
-    head.rect.x(head.rect.attrs.x + head.direction[0]*4);
-    head.rect.y(head.rect.attrs.y - head.direction[1]*4);
+    head.rect.x(head.rect.attrs.x + head.direction[0]);
+    head.rect.y(head.rect.attrs.y - head.direction[1]);
     segmentList.forEach((segment: any) => {
       rotateList.forEach((rotation: any) => {
         updateSegmentRotationDirection(segment, rotation);
