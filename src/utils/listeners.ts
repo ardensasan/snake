@@ -1,118 +1,53 @@
+import { Direction } from "../common/snake";
+import { addItemToRotationList, isArrayEqual } from "./array";
+
 export const addSnakeKeyPressListener = (headRef: any, rotateRef: any) => {
   window.addEventListener("keypress", ({ code }) => {
     const { current: head } = headRef;
     const { current: rotateList } = rotateRef;
-    if (code === "KeyW") {
-      if (
-        (head.direction[0] === 1 && head.direction[1] === 0) ||
-        (head.direction[0] === -1 && head.direction[1] === 0)
-      ) {
-        rotateList.push({
-          position: [head.rect.attrs.x - 25, head.rect.attrs.y - 25],
-          direction: [0, 1],
-          segmentsPassed: 0,
-        });
-        head.rect.rotate(head.direction[0] * -90);
-        head.direction = [0, 1];
+    if (
+      isArrayEqual(head.direction, Direction.Left) ||
+      isArrayEqual(head.direction, Direction.Right)
+    ) {
+      if (code === "KeyS") {
+        addItemToRotationList(head, rotateList, Direction.Down);
+      } else if (code === "KeyW") {
+        addItemToRotationList(head, rotateList, Direction.Up);
       }
-    } else if (code === "KeyS") {
-      if (
-        (head.direction[0] === 1 && head.direction[1] === 0) ||
-        (head.direction[0] === -1 && head.direction[1] === 0)
-      ) {
-        rotateList.push({
-          position: [head.rect.attrs.x - 25, head.rect.attrs.y - 25],
-          direction: [0, -1],
-          segmentsPassed: 0,
-        });
-        head.rect.rotate(head.direction[0] * 90);
-        head.direction = [0, -1];
-      }
-    } else if (code === "KeyA") {
-      if (
-        (head.direction[0] === 0 && head.direction[1] === 1) ||
-        (head.direction[0] === 0 && head.direction[1] === -1)
-      ) {
-        rotateList.push({
-          position: [head.rect.attrs.x - 25, head.rect.attrs.y - 25],
-          direction: [-1, 0],
-          segmentsPassed: 0,
-        });
-        head.rect.rotate(head.direction[1] * -90);
-        head.direction = [-1, 0];
-      }
-    } else if (code === "KeyD") {
-      if (
-        (head.direction[0] === 0 && head.direction[1] === 1) ||
-        (head.direction[0] === 0 && head.direction[1] === -1)
-      ) {
-        rotateList.push({
-          position: [head.rect.attrs.x - 25, head.rect.attrs.y - 25],
-          direction: [1, 0],
-          segmentsPassed: 0,
-        });
-        head.rect.rotate(head.direction[1] * 90);
-        head.direction = [1, 0];
+    } else if (
+      isArrayEqual(head.direction, Direction.Up) ||
+      isArrayEqual(head.direction, Direction.Down)
+    ) {
+      if (code === "KeyA") {
+        addItemToRotationList(head, rotateList, Direction.Left);
+      } else if (code === "KeyD") {
+        addItemToRotationList(head, rotateList, Direction.Right);
       }
     }
   });
 };
 
 export const removeSnakeKeyPressListener = (headRef: any, rotateRef: any) => {
-  window.removeEventListener("keypress", ({ code }) => {
+  window.addEventListener("keypress", ({ code }) => {
     const { current: head } = headRef;
     const { current: rotateList } = rotateRef;
-    if (code === "KeyW") {
-      if (
-        (head.direction[0] === 1 && head.direction[1] === 0) ||
-        (head.direction[0] === -1 && head.direction[1] === 0)
-      ) {
-        rotateList.push({
-          position: [head.rect.attrs.x - 25, head.rect.attrs.y - 25],
-          direction: [0, 1],
-          segmentsPassed: 0,
-        });
-        head.rect.rotate(head.direction[0] * -90);
-        head.direction = [0, 1];
+    if (
+      isArrayEqual(head.direction, Direction.Left) ||
+      isArrayEqual(head.direction, Direction.Right)
+    ) {
+      if (code === "KeyS") {
+        addItemToRotationList(head, rotateList, Direction.Down);
+      } else if (code === "KeyW") {
+        addItemToRotationList(head, rotateList, Direction.Up);
       }
-    } else if (code === "KeyS") {
-      if (
-        (head.direction[0] === 1 && head.direction[1] === 0) ||
-        (head.direction[0] === -1 && head.direction[1] === 0)
-      ) {
-        rotateList.push({
-          position: [head.rect.attrs.x - 25, head.rect.attrs.y - 25],
-          direction: [0, -1],
-          segmentsPassed: 0,
-        });
-        head.rect.rotate(head.direction[0] * 90);
-        head.direction = [0, -1];
-      }
-    } else if (code === "KeyA") {
-      if (
-        (head.direction[0] === 0 && head.direction[1] === 1) ||
-        (head.direction[0] === 0 && head.direction[1] === -1)
-      ) {
-        rotateList.push({
-          position: [head.rect.attrs.x - 25, head.rect.attrs.y - 25],
-          direction: [-1, 0],
-          segmentsPassed: 0,
-        });
-        head.rect.rotate(head.direction[1] * -90);
-        head.direction = [-1, 0];
-      }
-    } else if (code === "KeyD") {
-      if (
-        (head.direction[0] === 0 && head.direction[1] === 1) ||
-        (head.direction[0] === 0 && head.direction[1] === -1)
-      ) {
-        rotateList.push({
-          position: [head.rect.attrs.x - 25, head.rect.attrs.y - 25],
-          direction: [1, 0],
-          segmentsPassed: 0,
-        });
-        head.rect.rotate(head.direction[1] * 90);
-        head.direction = [1, 0];
+    } else if (
+      isArrayEqual(head.direction, Direction.Up) ||
+      isArrayEqual(head.direction, Direction.Down)
+    ) {
+      if (code === "KeyA") {
+        addItemToRotationList(head, rotateList, Direction.Left);
+      } else if (code === "KeyD") {
+        addItemToRotationList(head, rotateList, Direction.Right);
       }
     }
   });

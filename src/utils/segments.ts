@@ -38,7 +38,7 @@ export const addSegment = (
 //update position of segment
 export const updateSegment = (segment:any)=>{
   segment.rect.x(segment.rect.attrs.x + segment.direction[0]*2);
-  segment.rect.y(segment.rect.attrs.y - segment.direction[1]*2);
+  segment.rect.y(segment.rect.attrs.y + segment.direction[1]*2);
 };
 
 export const updateSegmentRotationDirection = (segment:any,rotation:any) =>{ 
