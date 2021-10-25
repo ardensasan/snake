@@ -9,14 +9,12 @@ export const checkHeadSegmentIntersection = (
 };
 
 const doesHeadIntersectWithSegment = (head: any, segmentRect: any) => {
-  return (false)
+  return false;
 };
 
 export const checkHeadFoodIntersection = (headRect: any, foodRect: any) => {
-  return (
-    headRect.attrs.x > foodRect.attrs.x &&
-    headRect.attrs.x < foodRect.attrs.x + 50 &&
-    headRect.attrs.y > foodRect.attrs.y &&
-    headRect.attrs.y < foodRect.attrs.y + 50
-  );
+  return (headRect.attrs.x < foodRect.attrs.x + 50 &&
+    headRect.attrs.x + 50 > foodRect.attrs.x &&
+    headRect.attrs.y < foodRect.attrs.y + 50 &&
+    50 + headRect.attrs.y > foodRect.attrs.y)
 };

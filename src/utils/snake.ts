@@ -34,7 +34,6 @@ export const animateSnake = ({
   rotateList,
 }: any) => {
   var anim = new Konva.Animation((frame: any) => {
-    console.log('%c 🍔 head.rect: ', 'font-size:20px;background-color: #ED9EC7;color:#fff;', head.rect);
     head.rect.x(head.rect.attrs.x + head.direction[0]*2);
     head.rect.y(head.rect.attrs.y + head.direction[1]*2);
     segmentList.forEach((segment: any) => {
